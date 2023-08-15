@@ -1,8 +1,13 @@
 #ifndef CHARS_H_SENTRY
 #define CHARS_H_SENTRY
 
+struct nodes;
+
 /* As strlen */
 int chars_length(const char *chars);
+
+/* Retruns 1 if chars1 and chars2 are similar sequences of chars */
+int chars_similar(char *chars1, char *chars2);
 
 /* Sets n bytes of char* with given char
  * Doesnt control if length > chars_length(chars);*/
@@ -47,5 +52,9 @@ char *chars_add(const char *chars1, const char *chars2);
 
 /* Returns a new chars as slice of chars* from start to end */
 char *chars_slice(const char *chars, int start, int end);
+
+/* Returns a pointer to sequence of char *
+ * that ends with NULL */
+struct nodes *chars_split(char *chars, const char *pattern);
 
 #endif

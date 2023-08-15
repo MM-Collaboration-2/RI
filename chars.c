@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include "nodes.h"
 #include "chars.h"
 
 
@@ -35,13 +36,22 @@ static char *chars_ncat(char *dest, const char *src, int n)
 
 
 
-
-
 int chars_length(const char *chars)
 {
     const char *t;
     for(t = chars; *t; t++){}
     return t - chars;
+}
+
+int chars_similar(char *chars1, char *chars2)
+{
+    while(*chars1 == *chars2){
+        if(*chars1 == '\0')
+            return 1;
+        chars1++;
+        chars2++;
+    }
+    return 0;
 }
 
 void chars_set(char *chars, char ch, int length)
@@ -202,7 +212,6 @@ int chars_is_float(const char *chars)
     return 1;
 }
 
-
 char* chars_replace(char* chars, const char* oldc, const char* newc)
 {
 
@@ -262,3 +271,39 @@ char *chars_slice(const char *chars, int start, int end)
     }
     return buf;
 }
+
+struct nodes *chars_split(char *chars, const char *pattern)
+{
+    int len;
+    char *start, *end, *tmp;;
+    struct nodes *n;
+
+    if(!chars_count(chars, pattern))
+        return NULL;
+
+    start = chars;
+    n = nodes_new();
+    while(start){
+        end = chars_lfind(start, pattern);
+        if(end == NULL)
+            break;
+        len = end - start;
+        if(len){
+            tmp = chars_new(len);
+            chars_ncat(tmp, start, len);
+            nodes_push_back(n, tmp);
+        }
+        start = end + chars_length(pattern);
+    }
+
+    len = chars_length(start);
+    if(len){
+        tmp = chars_new(len);
+        chars_ncat(tmp, start, len);
+        nodes_push_back(n, tmp);
+    }
+    
+    return n;
+}
+
+

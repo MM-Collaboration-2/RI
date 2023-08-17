@@ -273,5 +273,16 @@ void nodes_free(struct nodes *nds, void (*func)(void *))
     free(nds);
 }
 
+struct nodes *nodes_slice(struct nodes *nds, int start, int stop)
+{
+    struct nodes *n;
+    int i;
+    n = nodes_new(); 
+    for(i = start; i < stop; i++){
+        nodes_push_back(n, nodes_get(nds, i));
+    }
+    return n;
+}
+
 
 

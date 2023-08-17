@@ -1,8 +1,9 @@
 lt = ../littletest/littletest.c
 c = gcc -Wall -g
+os = test.o chars.o nodes.o littletest.o associations.o lexer.o
 
-test: test.o chars.o nodes.o littletest.o associations.o
-	$(c) test.o chars.o nodes.o littletest.o associations.o -o test
+test: $(os)
+	$(c) $(os) -o test
 
 test.o: test.c
 	$(c) test.c -c
@@ -15,6 +16,9 @@ nodes.o: nodes.c
 
 associations.o: associations.c
 	$(c) associations.c -c
+
+lexer.o: lexer.c
+	$(c) lexer.c -c
 
 littletest.o: $(lt)
 	$(c) $(lt) -c

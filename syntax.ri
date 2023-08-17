@@ -1,0 +1,147 @@
+if [a > b |
+	a = 10;
+]
+elif [b > a |
+	b = 10;
+]
+else [
+	a = 0;
+]
+
+while [len(s) != 0 |
+	s.pop();
+]
+
+
+func [ myfunc(a, b) -> int_t |
+	while [bar(a) < b |
+		a += b;
+		b -= 1;
+	]
+	return foo(a) + foo(b);
+]
+
+
+for [i in 0..10 |
+	s: list_t = {a, b, c};
+]
+
+hmp: hmp_t = {"1": 1,	#hashmap
+			"2": 2,
+			"3": 3,
+			};
+
+
+lst{start..end};				#slice
+
+{} # empty list
+{:} # empty hashmap
+
+foo = 1 if bar else 0;	#if in expression
+
+s = {(i if baf else 0) for i in lst}; #list comprehenstion
+
+~ one-line comment
+# one-line comment
+
+' multi
+  line
+  comment '
+
+class [MyCalass => OldClass |
+	name: str_t = "";
+	
+	~ method
+	# method
+	' method
+	func [hello(this: MyClass) |
+		print(this.name);
+	]
+]
+
+Construction reserved words:
+if else for while func class
+
+Expression reserved words
+and or return break continue .. true false
+
+
+
+Integer literals:
+0b101010 - binary
+0o42 - octal
+0d42 / 42 - decimal
+0x42 - hex
+
+Operators
+Binar
++ - / % *
++= -= /= %= *= 
+
+> < =
+>= <= == !=
+.
+
+Unar
+- + !
+()
+
+
+Basic types:
+int_t
+bol_t
+flt_t
+str_t
+lst_t
+hmp_t
+nil_t
+exc_t		# return <exception>
+
+
+
+Built-ins
+int_t()
+bol_t()
+flt_t()
+str_t()
+lst_t()
+hmp_t()
+nil_t()
+exc_t()
+
+
+str_t.copy()
+str_t.count()
+str_t.startswith()
+str_t.endswith()
+str_t.is_decimal()
+str_t.lower()
+str_t.upper()
+str_t.find()
+str_t.rfind()
+str_t.replace()
+str_t.split()
+str_t.strip()
+
+
+print();
+input();
+open();
+write();
+read();
+import();
+exec();
+defined();
+len();
+
+
+Runtime constants
+
+$argc
+$argv
+$line
+$func
+
+
+
+~> -> # @ ^ | / \ , % $ ! => := & ? :

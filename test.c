@@ -3,6 +3,7 @@
 #include "nodes.h"
 #include "chars.h"
 #include "associations.h"
+#include "lexer.h"
 #include "../littletest/littletest.h"
 
 
@@ -41,7 +42,7 @@ void *printchars(void *data)
 
 void nodes_test()
 {
-    struct nodes *nds;
+    struct nodes *nds, *nds2;
     int arr[] = {17, 19, 13, 11, -4, -10, 0};
     int sum, i;
     char *s1, *s2;
@@ -74,7 +75,6 @@ void nodes_test()
     nodes_insert(nds, 1, s1);
     nodes_remove(nds, 0, nodes_pass);
     assert_equal_string((char *)nodes_get_front(nds), "aboba");
-
     
     /* Test 5 */
     nodes_set_front(nds, s2);
@@ -120,6 +120,22 @@ void nodes_test()
     nodes_pop(nds);
     nodes_pop(nds);
     assert_equal_int(*(int *)nodes_pop(nds), 24); 
+
+
+
+    /* Test 12 */
+    nodes_push_back(nds, arr);
+    nodes_push_back(nds, arr + 1);
+    nodes_push_back(nds, arr + 2);
+    nodes_push_back(nds, arr + 3);
+
+    fprintf(stderr, "\n");
+    nodes_iter(nds, print_int_data);
+    fprintf(stderr, "\n");
+    nds2 = nodes_slice(nds, 1, 3);
+    fprintf(stderr, "\n");
+    nodes_iter(nds2, print_int_data);
+    fprintf(stderr, "\n");
 
 
     littletest_sum_up();
@@ -483,12 +499,36 @@ void associations_test()
     littletest_sum_up();
 }
 
+void *print_token_data(void *data)
+{
+    struct token *t;
+    t = (struct token *)data;
+    fprintf(stderr, "%s\t\t\t%d\n", t->str, t->type);
+    return data;
+}
+
+void lexer_test()
+{
+    char *ch1;
+    struct nodes *n;
+
+    /* Set up */
+
+    ch1 = chars_from("return ();");
+    n = lexer(ch1);
+    if(n)
+        nodes_iter(n, print_token_data);
+    else
+        fprintf(stderr, "NULL");
+}
+
 
 
 int main()
 {
-    nodes_test();
+    lexer_test();
+    /*nodes_test();
     chars_test();
-    associations_test();
+    associations_test();*/
     return 0;
 }

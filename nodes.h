@@ -53,4 +53,6 @@ void nodes_iter(struct nodes *nds, void *(*func)(void *));
 
 void nodes_free(struct nodes *nds, void (*func)(void *));
 
+struct nodes *nodes_slice(struct nodes *nds, int start, int end);
+
 #endif

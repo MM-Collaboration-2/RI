@@ -4,7 +4,7 @@
 #include "chars.h"
 #include "associations.h"
 #include "lexer.h"
-#include "../littletest/littletest.h"
+#include "littletest.h"
 
 
 

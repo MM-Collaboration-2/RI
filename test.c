@@ -960,6 +960,202 @@ void lexer_test()
     /* Test 111 */
     assert_equal_string(tok->str, "{:}");
 
+    /* nested list */
+    input = "{1, {2, 3}}";
+    tokens = lexer(input);
+
+    /* Test 112 */
+    assert_equal_int(nodes_length(tokens), 1);
+
+    /* Test 113 */
+    tok = nodes_get(tokens, 0);
+    assert_equal_int(tok->type, token_list);
+
+    /* Test 114 */
+    assert_equal_string(tok->str, "{1, {2, 3}}");
+
+    /* with an additional element */
+    input = "{1, {2, 3}, 4}";
+    tokens = lexer(input);
+
+    /* Test 115 */
+    assert_equal_int(nodes_length(tokens), 1);
+
+    /* Test 116 */
+    tok = nodes_get(tokens, 0);
+    assert_equal_int(tok->type, token_list);
+
+    /* Test 117 */
+    assert_equal_string(tok->str, "{1, {2, 3}, 4}");
+
+    /* only nested list */
+    input = "{{2, 3}}";
+    tokens = lexer(input);
+
+    /* Test 118 */
+    assert_equal_int(nodes_length(tokens), 1);
+
+    /* Test 119 */
+    tok = nodes_get(tokens, 0);
+    assert_equal_int(tok->type, token_list);
+
+    /* Test 120 */
+    assert_equal_string(tok->str, "{{2, 3}}");
+
+    /* hashmap in a list */
+    input = "{1, {\"b\": 2}}";
+    tokens = lexer(input);
+
+    /* Test 121 */
+    assert_equal_int(nodes_length(tokens), 1);
+
+    /* Test 122 */
+    tok = nodes_get(tokens, 0);
+    assert_equal_int(tok->type, token_list);
+
+    /* Test 123 */
+    assert_equal_string(tok->str, "{1, {\"b\": 2}}");
+
+    /* nested hashmap */
+    input = "{\"key1\": {\"key3\": value3, \"key4\": value4}, \"key2\": value2}";
+    tokens = lexer(input);
+
+    /* Test 124 */
+    assert_equal_int(nodes_length(tokens), 1);
+
+    /* Test 125 */
+    tok = nodes_get(tokens, 0);
+    assert_equal_int(tok->type, token_hashmap);
+
+    /* Test 126 */
+    assert_equal_string(tok->str, "{\"key1\": {\"key3\": value3, \"key4\": value4}, \"key2\": value2}");
+
+    /* only nested hashmap */
+    input = "{\"key1\": {\"key3\": value3, \"key4\": value4}}";
+    tokens = lexer(input);
+
+    /* Test 127 */
+    assert_equal_int(nodes_length(tokens), 1);
+
+    /* Test 128 */
+    tok = nodes_get(tokens, 0);
+    assert_equal_int(tok->type, token_hashmap);
+
+    /* Test 129 */
+    assert_equal_string(tok->str, "{\"key1\": {\"key3\": value3, \"key4\": value4}}");
+
+    /* with element before and after
+    (this makes the most sense, I guess we
+    could use less tests, but make them more complex) */
+    /* only nested hashmap */
+    input = "{\"key0\": value0, \"key1\": {\"key3\": value3, \"key4\": value4}, \"key2\": {value2, value5}} {\"b\": {2, 3}}";
+    tokens = lexer(input);
+
+    /* Test 130 */
+    assert_equal_int(nodes_length(tokens), 2);
+
+    /* Test 131 */
+    tok = nodes_get(tokens, 0);
+    assert_equal_int(tok->type, token_hashmap);
+
+    /* Test 132 */
+    assert_equal_string(tok->str, "{\"key0\": value0, \"key1\": {\"key3\": value3, \"key4\": value4}, \"key2\": {value2, value5}}");
+
+    /* Test 133 */
+    tok = nodes_get(tokens, 1);
+    assert_equal_int(tok->type, token_hashmap);
+
+    /* Test 134 */
+    assert_equal_string(tok->str, "{\"b\": {2, 3}}");
+
+    /* Nested nested list and hashmap*/
+    input = "{\"key0\": value0, \"key1\": {\"key3\": {\"key5\": value5}, \"key4\": value4}, \"key2\": {value2, value5}} {1, {2, 2, {3, 3}}}";
+    tokens = lexer(input);
+
+    /* Test 135 */
+    tok = nodes_get(tokens, 0);
+    assert_equal_int(tok->type, token_hashmap);
+
+    /* Test 136 */
+    assert_equal_string(tok->str, "{\"key0\": value0, \"key1\": {\"key3\": {\"key5\": value5}, \"key4\": value4}, \"key2\": {value2, value5}}");
+
+    /* Test 137 */
+    tok = nodes_get(tokens, 1);
+    assert_equal_int(tok->type, token_list);
+
+    /* Test 138 */
+    assert_equal_string(tok->str, "{1, {2, 2, {3, 3}}}");
+
+    /* Function calls */
+    input = "foo(1, 2)(5, 6)";
+    tokens = lexer(input);
+
+    /* Test 139 */
+    assert_equal_int(nodes_length(tokens), 3);
+
+    /* Test 140 */
+    tok = nodes_get(tokens, 0);
+    assert_equal_int(tok->type, token_identifier);
+
+    /* Test 141 */
+    assert_equal_string(tok->str, "foo");
+
+    /* Test 142 */
+    tok = nodes_get(tokens, 1);
+    assert_equal_int(tok->type, token_call);
+
+    /* Test 143 */
+    assert_equal_string(tok->str, "(1, 2)");
+
+    /* Test 144 */
+    tok = nodes_get(tokens, 2);
+    assert_equal_int(tok->type, token_call);
+
+    /* Test 145 */
+    assert_equal_string(tok->str, "(5, 6)");
+
+    /* chuchu */
+    input = "(1, 2)(5, 6)";
+    tokens = lexer(input);
+
+    /* Test 146 */
+    assert_equal_int(nodes_length(tokens), 5);
+
+    /* Test 147 */
+    tok = nodes_get(tokens, 0);
+    assert_equal_int(tok->type, token_open_bracket);
+
+    /* Test 148 */
+    assert_equal_string(tok->str, "(");
+
+    /* Test 149 */
+    tok = nodes_get(tokens, 1);
+    assert_equal_int(tok->type, token_integer);
+
+    /* Test 150 */
+    assert_equal_string(tok->str, "1");
+
+    /* Test 151 */
+    tok = nodes_get(tokens, 2);
+    assert_equal_int(tok->type, token_integer);
+
+    /* Test 152 */
+    assert_equal_string(tok->str, "2");
+
+    /* Test 153 */
+    tok = nodes_get(tokens, 3);
+    assert_equal_int(tok->type, token_close_bracket);
+
+    /* Test 154 */
+    assert_equal_string(tok->str, ")");
+
+    /* Test 155 */
+    tok = nodes_get(tokens, 4);
+    assert_equal_int(tok->type, token_call);
+
+    /* Test 156 */
+    assert_equal_string(tok->str, "(5, 6)");
+
     littletest_sum_up();
 }
 

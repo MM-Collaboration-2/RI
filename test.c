@@ -517,6 +517,7 @@ void lexer_test()
     /* Set up */
     littletest_set_up(0, 0);
 
+    /* Simple tests */
     /* Test 1 */
     input = "123 + 45.6";
     tokens = lexer(input);
@@ -544,7 +545,9 @@ void lexer_test()
     assert_equal_string(tok->str, "45.6");
 
 
-    /* Test identifiers */
+
+
+    /* Identifiers */
     input = "my_variable some_function(function_call) anotherVar";
     tokens = lexer(input);
 
@@ -579,7 +582,10 @@ void lexer_test()
     /* Test 16*/
     assert_equal_string(tok->str, "anotherVar");
 
-    /* Test numbers */
+
+
+
+    /* Numbers */
     input = "123 -456 789.123";
     tokens = lexer(input);
 
@@ -614,9 +620,345 @@ void lexer_test()
     /* Test 25 */
     assert_equal_string(tok->str, "789.123");
 
+
+
+
     /* Operators */
+    input = "! = + - * / % . < > != == += -= *= /= %= .. <= >= or and not return break continue raise true false";
+    tokens = lexer(input);
+
+    /* Test 26 */
+    assert_equal_int(nodes_length(tokens), 29);
+
+    /* Test 27 */
+    tok = nodes_get(tokens, 0);
+    assert_equal_int(tok->type, token_not);
+
+    /* Test 28 */
+    assert_equal_string(tok->str, "!");
+
+    /* Test 29 */
+    tok = nodes_get(tokens, 1);
+    assert_equal_int(tok->type, token_eql);
+
+    /* Test 30 */
+    assert_equal_string(tok->str, "=");
+
+    /* Test 31 */
+    tok = nodes_get(tokens, 2);
+    assert_equal_int(tok->type, token_add);
+
+    /* Test 32 */
+    assert_equal_string(tok->str, "+");
+
+    /* Test 33 */
+    tok = nodes_get(tokens, 3);
+    assert_equal_int(tok->type, token_sub);
+
+    /* Test 34 */
+    assert_equal_string(tok->str, "-");
+
+    /* Test 35 */
+    tok = nodes_get(tokens, 4);
+    assert_equal_int(tok->type, token_mul);
+
+    /* Test 36 */
+    assert_equal_string(tok->str, "*");
+
+    /* Test 37 */
+    tok = nodes_get(tokens, 5);
+    assert_equal_int(tok->type, token_div);
+
+    /* Test 38 */
+    assert_equal_string(tok->str, "/");
+
+    /* Test 39 */
+    tok = nodes_get(tokens, 6);
+    assert_equal_int(tok->type, token_mod);
+
+    /* Test 40 */
+    assert_equal_string(tok->str, "%");
+
+    /* Test 41 */
+    tok = nodes_get(tokens, 7);
+    assert_equal_int(tok->type, token_mem);
+
+    /* Test 42 */
+    assert_equal_string(tok->str, ".");
+
+    /* Test 43 */
+    tok = nodes_get(tokens, 8);
+    assert_equal_int(tok->type, token_l);
+
+    /* Test 44 */
+    assert_equal_string(tok->str, "<");
+
+    /* Test 45 */
+    tok = nodes_get(tokens, 9);
+    assert_equal_int(tok->type, token_g);
+
+    /* Test 46 */
+    assert_equal_string(tok->str, ">");
+
+    /* Test 47 */
+    tok = nodes_get(tokens, 10);
+    assert_equal_int(tok->type, token_noteql);
+
+    /* Test 48 */
+    assert_equal_string(tok->str, "!=");
+
+    /* Test 49 */
+    tok = nodes_get(tokens, 11);
+    assert_equal_int(tok->type, token_eqleql);
+
+    /* Test 50 */
+    assert_equal_string(tok->str, "==");
+
+    /* Test 51 */
+    tok = nodes_get(tokens, 12);
+    assert_equal_int(tok->type, token_addeql);
+
+    /* Test 52 */
+    assert_equal_string(tok->str, "+=");
+
+    /* Test 53 */
+    tok = nodes_get(tokens, 13);
+    assert_equal_int(tok->type, token_subeql);
+
+    /* Test 54 */
+    assert_equal_string(tok->str, "-=");
+
+    /* Test 55 */
+    tok = nodes_get(tokens, 14);
+    assert_equal_int(tok->type, token_muleql);
+
+    /* Test 56 */
+    assert_equal_string(tok->str, "*=");
+
+    /* Test 57 */
+    tok = nodes_get(tokens, 15);
+    assert_equal_int(tok->type, token_diveql);
+
+    /* Test 58 */
+    assert_equal_string(tok->str, "/=");
+
+    /* Test 59 */
+    tok = nodes_get(tokens, 16);
+    assert_equal_int(tok->type, token_modeql);
+
+    /* Test 60 */
+    assert_equal_string(tok->str, "%=");
+
+    /* Test 61 */
+    tok = nodes_get(tokens, 17);
+    assert_equal_int(tok->type, token_range);
+
+    /* Test 62 */
+    assert_equal_string(tok->str, "..");
+
+    /* Test 63 */
+    tok = nodes_get(tokens, 18);
+    assert_equal_int(tok->type, token_le);
+
+    /* Test 64 */
+    assert_equal_string(tok->str, "<=");
+
+    /* Test 65 */
+    tok = nodes_get(tokens, 19);
+    assert_equal_int(tok->type, token_ge);
+
+    /* Test 66 */
+    assert_equal_string(tok->str, ">=");
+
+    /* Test 67 */
+    tok = nodes_get(tokens, 20);
+    assert_equal_int(tok->type, token_or);
+
+    /* Test 68 */
+    assert_equal_string(tok->str, "or");
+
+    /* Test 69 */
+    tok = nodes_get(tokens, 21);
+    assert_equal_int(tok->type, token_and);
+
+    /* Test 70 */
+    assert_equal_string(tok->str, "and");
+
+    /* Test 71 */
+    tok = nodes_get(tokens, 22);
+    assert_equal_int(tok->type, token_not);
+
+    /* Test 72 */
+    assert_equal_string(tok->str, "not");
+
+    /* Test 73 */
+    tok = nodes_get(tokens, 23);
+    assert_equal_int(tok->type, token_return);
+
+    /* Test 74 */
+    assert_equal_string(tok->str, "return");
+
+    /* Test 75 */
+    tok = nodes_get(tokens, 24);
+    assert_equal_int(tok->type, token_break);
+
+    /* Test 76 */
+    assert_equal_string(tok->str, "break");
+
+    /* Test 77 */
+    tok = nodes_get(tokens, 25);
+    assert_equal_int(tok->type, token_continue);
+
+    /* Test 78 */
+    assert_equal_string(tok->str, "continue");
+
+    /* Test 79 */
+    tok = nodes_get(tokens, 26);
+    assert_equal_int(tok->type, token_raise);
+
+    /* Test 80 */
+    assert_equal_string(tok->str, "raise");
+
+    /* Test 81 */
+    tok = nodes_get(tokens, 27);
+    assert_equal_int(tok->type, token_true);
+
+    /* Test 82 */
+    assert_equal_string(tok->str, "true");
+
+    /* Test 83 */
+    tok = nodes_get(tokens, 28);
+    assert_equal_int(tok->type, token_false);
+
+    /* Test 84 */
+    assert_equal_string(tok->str, "false");
+
+
+
+
     /* Strings */
+    input = "\"helloworld\" \"this is a string\"";
+    tokens = lexer(input);
+
+    /* Test 85 */
+    assert_equal_int(nodes_length(tokens), 2);
+
+    /* Test 86 */
+    tok = nodes_get(tokens, 0);
+    assert_equal_int(tok->type, token_string);
+
+    /* Test 87 */
+    assert_equal_string(tok->str, "\"helloworld\"");
+
+    /* Test 88 */
+    tok = nodes_get(tokens, 1);
+    assert_equal_int(tok->type, token_string);
+
+    /* Test 89 */
+    assert_equal_string(tok->str, "\"this is a string\"");
+
+    /* Test escaped characters */
+    input = "\"hello\\\"world\" \"string\\nwith\\tescapes\"";
+    tokens = lexer(input);
+
+    /* Test 90 */
+    assert_equal_int(nodes_length(tokens), 2);
+
+    /* Test 91 */
+    tok = nodes_get(tokens, 0);
+    assert_equal_int(tok->type, token_string);
+
+    /* Test 92 */
+    assert_equal_string(tok->str, "\"hello\\\"world\"");
+
+    /* Test 93 */
+    tok = nodes_get(tokens, 1);
+    assert_equal_int(tok->type, token_string);
+
+    /* Test 94 */
+    assert_equal_string(tok->str, "\"string\\nwith\\tescapes\"");
+
+    /* Test russian letters */
+    input = "\"привет\" \"Меня зовут чел\"";
+    tokens = lexer(input);
+
+    /* Test 95 */
+    assert_equal_int(nodes_length(tokens), 2);
+
+    /* Test 96 */
+    tok = nodes_get(tokens, 0);
+    assert_equal_int(tok->type, token_string);
+
+    /* Test 97 */
+    assert_equal_string(tok->str, "\"привет\"");
+
+    /* Test 98 */
+    tok = nodes_get(tokens, 1);
+    assert_equal_int(tok->type, token_string);
+
+    /* Test 99 */
+    assert_equal_string(tok->str, "\"Меня зовут чел\"");
+
+
+
+
     /* Containers */
+    
+    /* list */
+    input = "{1, 2, 3}";
+    tokens = lexer(input);
+
+    /* Test 100 */
+    assert_equal_int(nodes_length(tokens), 1);
+
+    /* Test 101 */
+    tok = nodes_get(tokens, 0);
+    assert_equal_int(tok->type, token_list);
+
+    /* Test 102 */
+    assert_equal_string(tok->str, "{1, 2, 3}");
+
+    /* hashmap */
+    input = "{\"key1\": value1, \"key2\": value2}";
+    tokens = lexer(input);
+
+    /* Test 103 */
+    assert_equal_int(nodes_length(tokens), 1);
+
+    /* Test 104 */
+    tok = nodes_get(tokens, 0);
+    assert_equal_int(tok->type, token_hashmap);
+
+    /* Test 105 */
+    assert_equal_string(tok->str, "{\"key1\": value1, \"key2\": value2}");
+
+    /* empty list */
+    input = "{}";
+    tokens = lexer(input);
+
+    /* Test 106 */
+    assert_equal_int(nodes_length(tokens), 1);
+
+    /* Test 107 */
+    tok = nodes_get(tokens, 0);
+    assert_equal_int(tok->type, token_list);
+
+    /* Test 108 */
+    assert_equal_string(tok->str, "{}");
+
+    /* empty hashmap */
+    input = "{:}";
+    tokens = lexer(input);
+
+    /* Test 109 */
+    assert_equal_int(nodes_length(tokens), 1);
+
+    /* Test 110 */
+    tok = nodes_get(tokens, 0);
+    assert_equal_int(tok->type, token_hashmap);
+
+    /* Test 111 */
+    assert_equal_string(tok->str, "{:}");
 
     littletest_sum_up();
 }

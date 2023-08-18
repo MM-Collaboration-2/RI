@@ -65,7 +65,7 @@ struct nodes *lexer(char *expression)
     static int setted = 0;
 
     static enum token_types types_vec[] = {
-        token_not,              /* !          0 */
+        token_not,              /* !\not      0 */
         token_eql,              /* =          1 */
         token_add,              /* +          2 */
         token_sub,              /* -          3 */
@@ -89,13 +89,12 @@ struct nodes *lexer(char *expression)
 
         token_or,               /* or         20*/
         token_and,              /* and        21*/
-        token_not,              /* not        22*/
-        token_return,           /* return     23*/
-        token_break,            /* break      24*/
-        token_continue,         /* continue   25*/
-        token_raise,            /* raise      26*/
-        token_true,             /* true       27*/
-        token_false,            /* false      28*/
+        token_return,           /* return     22*/
+        token_break,            /* break      23*/
+        token_continue,         /* continue   24*/
+        token_raise,            /* raise      25*/
+        token_true,             /* true       26*/
+        token_false,            /* false      27*/
     };
 
 
@@ -126,14 +125,14 @@ struct nodes *lexer(char *expression)
         associations_set(as, "<=",       types_vec + 18);
         associations_set(as, ">=",       types_vec + 19);
 
-        associations_set(as, "or",       types_vec + 21);
-        associations_set(as, "and",      types_vec + 22);
-        associations_set(as, "return",   types_vec + 23);
-        associations_set(as, "break",    types_vec + 24);
-        associations_set(as, "continue", types_vec + 25);
-        associations_set(as, "raise",    types_vec + 26);
-        associations_set(as, "true",     types_vec + 27);
-        associations_set(as, "false",    types_vec + 28);
+        associations_set(as, "or",       types_vec + 20);
+        associations_set(as, "and",      types_vec + 21);
+        associations_set(as, "return",   types_vec + 22);
+        associations_set(as, "break",    types_vec + 23);
+        associations_set(as, "continue", types_vec + 24);
+        associations_set(as, "raise",    types_vec + 25);
+        associations_set(as, "true",     types_vec + 26);
+        associations_set(as, "false",    types_vec + 27);
 
         setted = 1;
     }
@@ -159,7 +158,7 @@ struct nodes *lexer(char *expression)
                 tmp++;
                 if(!tmp)
                     return NULL;
-                if(*tmp == '"'){
+                if(*tmp == '"' && *(tmp - 1) != '\\'){
                     string_f = 0;
                 }
             }
@@ -195,7 +194,7 @@ struct nodes *lexer(char *expression)
                 tmp++;
                 if(!tmp)
                     return NULL;
-                if(*tmp == '"'){
+                if(*tmp == '"' && *(tmp - 1) != '\\'){
                     string_f++;
                     string_f /= 2;
                 }
@@ -247,7 +246,7 @@ struct nodes *lexer(char *expression)
                         tmp++;
                         if(!tmp)
                             return NULL;
-                        if(*tmp == '"'){
+                        if(*tmp == '"' && *(tmp - 1) != '\\'){
                             string_f++;
                             string_f /= 2;
                         }

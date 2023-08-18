@@ -59,10 +59,11 @@ struct nodes *lexer(char *expression)
 
     int string_f, hashmap_f, brackets_f, float_f;
 
+    enum token_types *type;
+
     static struct associations *as;
     static int setted = 0;
 
-    enum token_types *type;
     static enum token_types types_vec[] = {
         token_not,              /* !          0 */
         token_eql,              /* =          1 */
@@ -97,9 +98,10 @@ struct nodes *lexer(char *expression)
         token_false,            /* false      28*/
     };
 
-    as = associations_new(60);
 
     if(!setted){
+
+        as = associations_new(60);
 
         associations_set(as, "!",        types_vec);
         associations_set(as, "not",      types_vec);
@@ -221,12 +223,15 @@ struct nodes *lexer(char *expression)
             }
             tok = token_new();
             tok->str = chars_slice(start, 0, tmp - start);
-            type = (enum token_types *)associations_get(as,
-                    tok->str);
-            if(!type)
-                tok->type = token_other;
-            else
+            type = associations_get(as, tok->str);
+
+
+            if(type){
                 tok->type = *type;
+            }
+            else
+                tok->type = token_other;
+            
             nodes_push_back(nds, tok);
             continue;
         }
@@ -235,7 +240,8 @@ struct nodes *lexer(char *expression)
             tok = (struct token *)nodes_get_back(nds);
             if(tok){
                 if(tok->type == token_call ||
-                        tok->type == token_identifier){
+                        tok->type == token_identifier ||
+                        tok->type == token_close_bracket){
                     brackets_f = 1;
                     while(brackets_f != 0){
                         tmp++;

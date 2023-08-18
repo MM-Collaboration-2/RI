@@ -507,19 +507,118 @@ void *print_token_data(void *data)
     return data;
 }
 
+
 void lexer_test()
 {
-    char *ch1;
-    struct nodes *n;
+    struct token *tok;
+    char *input;
+    struct nodes *tokens;
 
     /* Set up */
+    littletest_set_up(0, 0);
 
-    ch1 = chars_from("return ();");
-    n = lexer(ch1);
-    if(n)
-        nodes_iter(n, print_token_data);
-    else
-        fprintf(stderr, "NULL");
+    /* Test 1 */
+    input = "123 + 45.6";
+    tokens = lexer(input);
+    assert_equal_int(nodes_length(tokens), 3);
+
+    /* Test 2 */
+    tok = nodes_get(tokens, 0);
+    assert_equal_int(tok->type, token_integer);
+
+    /* Test 3 */
+    assert_equal_string(tok->str, "123");
+
+    /* Test 4 */
+    tok = nodes_get(tokens, 1);
+    assert_equal_int(tok->type, token_add);
+
+    /* Test 5 */
+    assert_equal_string(tok->str, "+");
+
+    /* Test 6 */
+    tok = nodes_get(tokens, 2);
+    assert_equal_int(tok->type, token_float);
+
+    /* Test 7 */
+    assert_equal_string(tok->str, "45.6");
+
+
+    /* Test identifiers */
+    input = "my_variable some_function(function_call) anotherVar";
+    tokens = lexer(input);
+
+    /* Test 8 */
+    assert_equal_int(nodes_length(tokens), 4);
+
+    /* Test 9 */
+    tok = nodes_get(tokens, 0);
+    assert_equal_int(tok->type, token_identifier);
+
+    /* Test 10 */
+    assert_equal_string(tok->str, "my_variable");
+
+    /* Test 11 */
+    tok = nodes_get(tokens, 1);
+    assert_equal_int(tok->type, token_identifier);
+
+    /* Test 12 */
+    assert_equal_string(tok->str, "some_function");
+
+    /* Test 13*/
+    tok = nodes_get(tokens, 2);
+    assert_equal_int(tok->type, token_call);
+
+    /* Test 14*/
+    assert_equal_string(tok->str, "(function_call)");
+
+    /* Test 15*/
+    tok = nodes_get(tokens, 3);
+    assert_equal_int(tok->type, token_identifier);
+
+    /* Test 16*/
+    assert_equal_string(tok->str, "anotherVar");
+
+    /* Test numbers */
+    input = "123 -456 789.123";
+    tokens = lexer(input);
+
+    /* Test 17 */
+    assert_equal_int(nodes_length(tokens), 4);
+
+    /* Test 18 */
+    tok = nodes_get(tokens, 0);
+    assert_equal_int(tok->type, token_integer);
+
+    /* Test 19 */
+    assert_equal_string(tok->str, "123");
+
+    /* Test 20 */
+    tok = nodes_get(tokens, 1);
+    assert_equal_int(tok->type, token_sub);
+
+    /* Test 21 */
+    assert_equal_string(tok->str, "-");
+
+    /* Test 22 */
+    tok = nodes_get(tokens, 2);
+    assert_equal_int(tok->type, token_integer);
+
+    /* Test 23 */
+    assert_equal_string(tok->str, "456");
+
+    /* Test 24 */
+    tok = nodes_get(tokens, 3);
+    assert_equal_int(tok->type, token_float);
+
+    /* Test 25 */
+    assert_equal_string(tok->str, "789.123");
+
+    /* Operators */
+    /* Strings */
+    /* Containers */
+
+    littletest_sum_up();
 }
 
 
